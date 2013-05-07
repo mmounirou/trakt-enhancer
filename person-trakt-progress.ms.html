@@ -1,0 +1,50 @@
+{{! params : progressPercent,watched,all,remainWatched,collectPercent,collected,remainCollected }}
+
+<div id="progress-toggler" style="">
+	<div class="breakaway-wrapper">
+		<div class="inset">
+			<div class="row-links content">
+				<div class="split">
+					<div class="left title">
+						Your <strong>watched</strong> progress...
+					</div>
+					<div class="left title">
+						Your <strong>collection</strong> progress...
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="breakaway-wrapper" id="summary-progress-wrapper">
+		<div class="inset2">
+			<div class="content">
+				<div class="progress-wrapper">
+										<div class="progress">
+						<div class="progress-bar-wrapper">
+							<div class="progress-bar">
+								<div id="watched-progress-bar" class="percentage-bar" style="width: {{progressPercent}}%;">{{progressPercent}}%&nbsp;</div>
+								<div id="watched-progress-percentage" class="small-percentage"></div>
+							</div>
+						</div>
+						<p class="progress-text">
+							You have watched <strong id="watched-progress-number">{{watched}}</strong> out of <strong id="watched-progress-total">{{all}}</strong> items.<br>
+							<span id="watched-progress-unwatched">That leaves <strong>{{remainWatched}}</strong> items left to watch.</span>
+						</p>
+					</div>
+					<div class="progress">
+						<div class="progress-bar-wrapper">
+							<div class="progress-bar">
+								<div id="collected-progress-bar" class="percentage-bar" style="width: {{collectPercent}}%;">{{collectPercent}}%&nbsp;</div>
+								<div id="collected-progress-percentage" class="small-percentage"></div>
+							</div>
+						</div>
+						<p class="progress-text">
+							You have collected <strong id="collected-progress-number">{{collected}}</strong> out of <strong id="collected-progress-total">{{all}}</strong> items.<br>
+							<span id="collected-progress-unwatched">That leaves <strong>{{remainCollected}}</strong> items left to collect.</span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

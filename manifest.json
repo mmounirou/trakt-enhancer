@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Trakt Person Progress",
+  "description": "This extension add progression in trakt person page",
+  "version": "1.0",
+  "permissions": [
+    "http://trakt.tv/"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://trakt.tv/person/*"],
+      "js": ["jquery-2.0.0.min.js","handlebars.js","person-trakt-progress.js"],
+      "css":["show.20130429.css"]
+    }
+  ],
+ "web_accessible_resources" : ["person-trakt-progress.ms.html"] 
+}
