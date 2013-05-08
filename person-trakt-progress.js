@@ -1,4 +1,10 @@
-function updateProgressionArea(template){
+function updateProgressionArea(template,newCollected,newSeen){
+    //due to order in event firing the click event is sent to the extension
+    //before sending to the trakt website.
+    //So the .episode-overlay-seen and .episode-overlay-collection are not yet added
+    
+    console.log("");
+    
     var elmt = $("#role-links>a.current").attr("href").split("/").reverse();
     var kindId =  elmt[1]+"-"+elmt[0];
     var kindDiv = $("#"+kindId);
@@ -6,8 +12,8 @@ function updateProgressionArea(template){
     
     var movieCount = allMovies.length;
     
-    var collectedCount = allMovies.find(".episode-overlay-collection").length;
-    var seenCount = allMovies.find(".episode-overlay-seen").length;
+    var collectedCount = (allMovies.find(".episode-overlay-collection").length) + ((newCollected)?1:0);
+    var seenCount = (allMovies.find(".episode-overlay-seen").length) + ((newSeen)?1:0);
     var scrobbledCount = allMovies.find(".episode-overlay-watched").length;
     var watchedCount = seenCount + scrobbledCount;
     
@@ -27,10 +33,22 @@ function updateProgressionArea(template){
 $.get(chrome.extension.getURL("person-trakt-progress.ms.html"),function(data){
     var template = Handlebars.compile(data);
     
-    updateProgressionArea(template);
+    updateProgressionArea(template,false,false);
     
-    $(".seen, .collection, #role-links>a").click(function(){
-        updateProgressionArea(template);
+    $("#role-links>a").click(function(){
+        updateProgressionArea(template,false,false);
+    });
+
+    $(".seen").click(function(){
+        updateProgressionArea(template,false,true);
     });
     
+    $(".collection").click(function(){
+        updateProgressionArea(template,true,false);
+    });
+    
+    //Fix an issue in trakt which allow the user to mark an item as seen or collected indefinitly
+     $(".seen, .collection").click(function(){
+       $(this).remove();
+    });
 }); 
