@@ -1,4 +1,4 @@
-function updateProgression(template){
+function updateProgressionArea(template){
     var elmt = $("#role-links>a.current").attr("href").split("/").reverse();
     var kindId =  elmt[1]+"-"+elmt[0];
     var kindDiv = $("#"+kindId);
@@ -27,15 +27,10 @@ function updateProgression(template){
 $.get(chrome.extension.getURL("person-trakt-progress.ms.html"),function(data){
     var template = Handlebars.compile(data);
     
-    updateProgression(template);
+    updateProgressionArea(template);
     
-    $("#role-links>a").click(function(){
-        updateProgression(template);
-    });
-
-    $(".seen, .collection").hover(function(){
-        //updateProgression(template);
-        console.log("hover");
+    $(".seen, .collection, #role-links>a").click(function(){
+        updateProgressionArea(template);
     });
     
 }); 
