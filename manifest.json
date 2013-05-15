@@ -4,14 +4,27 @@
   "description": "This extension add progression in trakt person page",
   "version": "1.1",
   "permissions": [
-    "http://trakt.tv/"
+    "http://trakt.tv/",
+    "http://yify-torrents.com/"
   ],
   "content_scripts": [
     {
-      "matches": ["http://trakt.tv/person/*"],
-      "js": ["jquery-2.0.0.min.js","handlebars.js","person-trakt-progress.js"],
-      "css":["show.20130429.css"]
+      "matches": [
+        "http://trakt.tv/*"
+      ],
+      "js": [
+        "jquery-2.0.0.min.js",
+        "handlebars.js",
+        "person-trakt-progress.js",
+        "yify-enhancer.js",
+        "trakt-enhancer.js"
+      ],
+      "css": [
+        "show.20130429.css"
+      ]
     }
   ],
- "web_accessible_resources" : ["person-trakt-progress.ms.html"] 
+  "web_accessible_resources": [
+    "person-trakt-progress.ms.html"
+  ]
 }

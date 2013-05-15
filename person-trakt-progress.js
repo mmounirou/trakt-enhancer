@@ -30,25 +30,28 @@ function updateProgressionArea(template,newCollected,newSeen){
     $(".main-wrapper").before(template(context));        
 }
 
-$.get(chrome.extension.getURL("person-trakt-progress.ms.html"),function(data){
-    var template = Handlebars.compile(data);
-    
-    updateProgressionArea(template,false,false);
-    
-    $("#role-links>a").click(function(){
-        updateProgressionArea(template,false,false);
-    });
+function initTraktProgress() {
+    $.get(chrome.extension.getURL("person-trakt-progress.ms.html"),function(data){
+      var template = Handlebars.compile(data);
+      
+      updateProgressionArea(template,false,false);
+      
+      $("#role-links>a").click(function(){
+          updateProgressionArea(template,false,false);
+      });
 
-    $(".seen").click(function(){
-        updateProgressionArea(template,false,true);
-    });
-    
-    $(".collection").click(function(){
-        updateProgressionArea(template,true,false);
-    });
-    
-    //Fix an issue in trakt which allow the user to mark an item as seen or collected indefinitly
-     $(".seen, .collection").click(function(){
-       $(this).remove();
-    });
-}); 
+      $(".seen").click(function(){
+          updateProgressionArea(template,false,true);
+      });
+      
+      $(".collection").click(function(){
+          updateProgressionArea(template,true,false);
+      });
+      
+      //Fix an issue in trakt which allow the user to mark an item as seen or collected indefinitly
+       $(".seen, .collection").click(function(){
+         $(this).remove();
+      });
+  }); 
+}
+
