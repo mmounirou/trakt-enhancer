@@ -1,7 +1,7 @@
 function initYifyEnhancement(){
 	console.log("");
 
-	$(".library-show").has('a[href^="/movie"]').each(function(index,data){
+	$(".library-show , .poster").has('a[href^="/movie"]').each(function(index,data){
 		var title = $(data).find(".title").text();
 		
 		var request = $.ajax({
@@ -12,13 +12,12 @@ function initYifyEnhancement(){
 		});
 
 		request.done(function(result) {
-			if(!(result["error"]==="No movies found"))
-			{
-				console.log(title);
-				console.log(result[0]["TorrentMagnetUrl"]);
-				$(data).find(".general").append('<span class="watchlist show-tip" title="XXXXXXXXXXXXXXXX">');
-			}
-
+            if(!(result["error"]==="No movies found")){
+                $(data).find(".general").append('<span class="download show-tip" title="Download" />');
+                $(data).find(".download").click(function(){
+                    location.href = result[0]["TorrentUrl"];
+                });
+            }
 		});
 
 		request.fail(function(jqXHR, textStatus) {
