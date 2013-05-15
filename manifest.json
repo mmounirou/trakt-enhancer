@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Trakt Person Progress",
-  "description": "This extension add progression in trakt person page",
-  "version": "1.1",
+  "name": "Trakt Enhancer",
+  "description": "This extension add progression in trakt person page and support of torrent yify",
+  "version": "1.2",
   "permissions": [
     "http://trakt.tv/",
     "http://yify-torrents.com/"
