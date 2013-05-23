@@ -1,3 +1,9 @@
+.quick-icons span.download {
+background-image: url(http://b.dryicons.com/images/icon_sets/coquette_part_5_icons_set/png/128x128/magnet.png);
+width: 20px;
+height: 25px
+}
+
 #summary-progress-wrapper .inset {
     overflow:hidden;
 }

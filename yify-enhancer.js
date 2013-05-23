@@ -14,8 +14,9 @@ function initYifyEnhancement(){
 		request.done(function(result) {
             if(!(result["error"]==="No movies found")){
                 $(data).find(".general").append('<span class="download show-tip" title="Download" />');
+                var movieTorrentUrl = result["MovieList"][0]["TorrentUrl"];
                 $(data).find(".download").click(function(){
-                    location.href = result[0]["TorrentUrl"];
+                    location.href = movieTorrentUrl;
                 });
             }
 		});
