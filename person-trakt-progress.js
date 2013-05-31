@@ -14,8 +14,9 @@ function updateProgressionArea(template,newCollected,newSeen){
     
     var collectedCount = (allMovies.find(".episode-overlay-collection").length) + ((newCollected)?1:0);
     var seenCount = (allMovies.find(".episode-overlay-seen").length) + ((newSeen)?1:0);
-    var scrobbledCount = allMovies.find(".episode-overlay-watched").length;
-    var watchedCount = seenCount + scrobbledCount;
+    var scrobbledCount = allMovies.find(".episode-overlay-watched").length; 
+    var scrobbledCheckin = allMovies.find(".episode-overlay-checkin").length;
+    var watchedCount = seenCount + scrobbledCount + scrobbledCheckin;
     
     var context = {all:movieCount,
                    watched:watchedCount,
