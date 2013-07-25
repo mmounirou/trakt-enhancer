@@ -3,6 +3,11 @@ $(document).ready(function() {
 		initTraktProgress();
 	}
 
+	if(window.location.href.indexOf("http://trakt.tv/movie") == 0)
+	{
+		initLocalReleaseDate();
+	}
+
 	initYifyEnhancement();
 
 
