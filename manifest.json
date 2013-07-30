@@ -6,7 +6,8 @@
   "permissions": [
     "http://trakt.tv/",
     "http://api.trakt.tv/",
-    "http://yify-torrents.com/"
+    "http://yify-torrents.com/",
+    "http://mymovieapi.com/"
   ],
   "content_scripts": [
     {

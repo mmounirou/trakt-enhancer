@@ -1,13 +1,16 @@
-function extendCollection(contents,extender) {
+function extendCollection(extendedAttribute, contents, extender) {
 	var result = new Array();
 	contents.forEach(function(content) {
-		extender(content).forEach(function(extendedId) {
-			var newContent = _.clone(content);
-			newContent.extendedId = extendedId;
-			result.push(newContent);
-		});
+		var extendedsIds = extender(content);
+		if (extendedsIds) {
+			extendedsIds.forEach(function(extendedId) {
+				var newContent = _.clone(content);
+				newContent[extendedAttribute] = extendedId;
+				result.push(newContent);
+			});
+		}
 	});
-	return result;	
+	return result;
 }
 
 function groupMoviesByGenres(contents) {
@@ -38,33 +41,11 @@ $(document).ready(function() {
 			type: "GET",
 			dataType: "json"
 		});
+
 		request.done(function(result) {
 			var seenContents = result.filter(function(content) {
 				return content.plays != 0;
 			});
-
-			var contentsGroupedCountByYear = _.pairs(_.countBy(seenContents, function(content) {
-				return content.year;
-			}));
-
-			var contentsGroupedByYear =_.groupBy(seenContents, function(content) {
-				return content.year;
-			});
-
-			var moviesExtendedToGenre = extendCollection(seenContents,function(movie) {
-				return movie.genres;
-			})
-
-
-			var contentsGroupedCountByGenres = _.pairs(_.countBy(moviesExtendedToGenre, function(content) {
-				return content.extendedId;
-			}));
-
-			var contentsGroupedByGenres = _.groupBy(moviesExtendedToGenre, function(content) {
-				return content.extendedId;
-			});
-
-			$(".main-wrapper").after("<div class='stats-wrapper'></div>");
 
 			// Radialize the colors
 			Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function(color) {
@@ -80,57 +61,189 @@ $(document).ready(function() {
 						]
 				};
 			})
+			statOnTraktAttributes(seenContents, contentType);
+			statOnImdbAttributes(seenContents, contentType);
 
-			$('.stats-wrapper').highcharts({
-				chart: {
-					plotBackgroundColor: null,
-					plotBorderWidth: null,
-					plotShadow: false
-				},
-				title: {
-					text: "All Time Seens " + contentType + " Stats"
-				},
-				tooltip: {
-					formatter: function() {
-						var usedDatas = null;
-						if(this.series.name == "By Year")
-						{
-							usedDatas = contentsGroupedByYear;
-						}
-						else{
-							usedDatas = contentsGroupedByGenres;
-						}
-						var result = '<span style="color:'+this.series.color+'">'+this.point.name+'</span>: <b>'+this.point.y+'</b> '+contentType+'<br/> ';
-						usedDatas[this.point.name].forEach(function(value) {
-							result = result+"<br/> "+value.title;
-						})
-						return result+"<br/>";
-					}
-				},
-				plotOptions: {
-					pie: {
-						allowPointSelect: true,
-						cursor: 'pointer',
-						dataLabels: {
-							enabled: true,
-							color: '#000000',
-							connectorColor: '#000000',
-							format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-						}
-					}
-				},
-				series: [{
-					type: 'pie',
-					name: 'By Year',
-					data: contentsGroupedCountByYear,
-					center: ["30%"],
-				}, {
-					type: 'pie',
-					name: 'By Genre',
-					data: contentsGroupedCountByGenres,
-					center: ["70%"],
-				}]
-			});
 		});
 	}
 })
+
+function statOnImdbAttributes(seenContents, contentType) {
+	var seenContentByImdbId = _.groupBy(seenContents, function(movie) {
+		return movie.imdb_id;
+	});
+
+	var keys = _.keys(seenContentByImdbId);
+	var allRequests = [];
+	while (keys.length > 0) {
+		var imdbIds = _.first(keys, 10).join(",");
+		keys = _.rest(keys, 10);
+
+		var request = $.ajax({
+			url: "http://mymovieapi.com/",
+			data: "ids=" + imdbIds + "&plot=none&type=json&episode=0",
+			type: "GET",
+			dataType: "json",
+			success: function(imdbMovies) {
+				imdbMovies.forEach(function(movieMovie) {
+					seenContentByImdbId[movieMovie.imdb_id][0].imdbContent = movieMovie;
+				});
+			}
+		});
+
+		allRequests.push(request);
+	}
+
+	$.when.apply(undefined, allRequests).then(function(datas) {
+		var movies = _.values(seenContentByImdbId);
+
+		var moviesExtendedToActor = extendCollection("actor", seenContents, function(movie) {
+			return movie.imdbContent.actors;
+		})
+
+		var moviesExtendedToDirector = extendCollection("director", seenContents, function(movie) {
+			return movie.imdbContent.directors;
+		})
+
+		var contentsGroupedCountByActor = _.pairs(_.countBy(moviesExtendedToActor, function(content) {
+			return content["actor"];
+		}));
+
+		var contentsGroupedByActor = _.groupBy(moviesExtendedToActor, function(content) {
+			return content["actor"];
+		});
+
+		var contentsGroupedCountByDirector = _.pairs(_.countBy(moviesExtendedToDirector, function(content) {
+			return content["director"];
+		}));
+
+		var contentsGroupedByDirector = _.groupBy(moviesExtendedToDirector, function(content) {
+			return content["director"];
+		});
+
+		$(".stats-wrapper").after("<div class='stats-people-wrapper'></div>");
+
+		$('.stats-people-wrapper').highcharts({
+			chart: {
+				plotBackgroundColor: null,
+				plotBorderWidth: null,
+				plotShadow: false
+			},
+			title: {
+				text: "All Time Seens " + contentType + " Stats"
+			},
+			tooltip: {
+				formatter: function() {
+					var usedDatas = null;
+					if (this.series.name == "By Actor") {
+						usedDatas = contentsGroupedByActor;
+					} else {
+						usedDatas = contentsGroupedByDirector;
+					}
+					var result = '<span style="color:' + this.series.color + '">' + this.point.name + '</span>: <b>' + this.point.y + '</b> ' + contentType + '<br/> ';
+					usedDatas[this.point.name].forEach(function(value) {
+						result = result + "<br/> " + value.title;
+					})
+					return result + "<br/>";
+				}
+			},
+			plotOptions: {
+				pie: {
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: true,
+						color: '#000000',
+						connectorColor: '#000000',
+						format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+					}
+				}
+			},
+			series: [{
+				type: 'pie',
+				name: 'By Actor',
+				data: contentsGroupedCountByActor,
+				center: ["30%"],
+			}, {
+				type: 'pie',
+				name: 'By Genre',
+				data: contentsGroupedCountByDirector,
+				center: ["70%"],
+			}]
+		});
+	});
+}
+
+function statOnTraktAttributes(seenContents, contentType) {
+	$(".main-wrapper").after("<div class='stats-wrapper'></div>");
+
+	var contentsGroupedCountByYear = _.pairs(_.countBy(seenContents, function(content) {
+		return content.year;
+	}));
+
+	var contentsGroupedByYear = _.groupBy(seenContents, function(content) {
+		return content.year;
+	});
+
+	var moviesExtendedToGenre = extendCollection("genre", seenContents, function(movie) {
+		return movie.genres;
+	})
+
+
+	var contentsGroupedCountByGenres = _.pairs(_.countBy(moviesExtendedToGenre, function(content) {
+		return content["genre"];
+	}));
+
+	var contentsGroupedByGenres = _.groupBy(moviesExtendedToGenre, function(content) {
+		return content["genre"];
+	});
+
+	$('.stats-wrapper').highcharts({
+		chart: {
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false
+		},
+		title: {
+			text: "All Time Seens " + contentType + " Stats"
+		},
+		tooltip: {
+			formatter: function() {
+				var usedDatas = null;
+				if (this.series.name == "By Year") {
+					usedDatas = contentsGroupedByYear;
+				} else {
+					usedDatas = contentsGroupedByGenres;
+				}
+				var result = '<span style="color:' + this.series.color + '">' + this.point.name + '</span>: <b>' + this.point.y + '</b> ' + contentType + '<br/> ';
+				usedDatas[this.point.name].forEach(function(value) {
+					result = result + "<br/> " + value.title;
+				})
+				return result + "<br/>";
+			}
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: 'pointer',
+				dataLabels: {
+					enabled: true,
+					color: '#000000',
+					connectorColor: '#000000',
+					format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+				}
+			}
+		},
+		series: [{
+			type: 'pie',
+			name: 'By Year',
+			data: contentsGroupedCountByYear,
+			center: ["30%"],
+		}, {
+			type: 'pie',
+			name: 'By Genre',
+			data: contentsGroupedCountByGenres,
+			center: ["70%"],
+		}]
+	});
+}
