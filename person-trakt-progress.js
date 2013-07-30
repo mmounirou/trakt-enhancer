@@ -65,7 +65,7 @@ function getStrMonth(month) {
     case (5):
       return "May";
     case (6):
-      return "Jun";
+      return "June";
     case (7):
       return "July";
     case (8):

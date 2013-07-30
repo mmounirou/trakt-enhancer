@@ -5,6 +5,7 @@
   "version": "1.5",
   "permissions": [
     "http://trakt.tv/",
+    "http://api.trakt.tv/",
     "http://yify-torrents.com/"
   ],
   "content_scripts": [
@@ -15,9 +16,12 @@
       "js": [
         "jquery-2.0.0.min.js",
         "handlebars.js",
+        "highcharts.js",
         "person-trakt-progress.js",
         "yify-enhancer.js",
-        "trakt-enhancer.js"
+        "underscore-min.js",
+        "trakt-enhancer.js",
+        "charts-enhancer.js"
       ],
       "css": [
         "show.20130429.css"
