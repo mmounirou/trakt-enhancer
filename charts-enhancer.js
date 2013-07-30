@@ -98,24 +98,32 @@ function statOnImdbAttributes(seenContents, contentType) {
 		var movies = _.values(seenContentByImdbId);
 
 		var moviesExtendedToActor = extendCollection("actor", seenContents, function(movie) {
-			return movie.imdbContent.actors;
+			if(movie.imdbContent){
+				return movie.imdbContent.actors;
+			}
 		})
 
 		var moviesExtendedToDirector = extendCollection("director", seenContents, function(movie) {
-			return movie.imdbContent.directors;
+			if(movie.imdbContent){
+				return movie.imdbContent.directors;
+			}
 		})
 
-		var contentsGroupedCountByActor = _.pairs(_.countBy(moviesExtendedToActor, function(content) {
+		var contentsGroupedCountByActor = _.last(_.sortBy(_.pairs(_.countBy(moviesExtendedToActor, function(content) {
 			return content["actor"];
-		}));
+		})),function(value){
+			return value[1];
+		}),50);
 
 		var contentsGroupedByActor = _.groupBy(moviesExtendedToActor, function(content) {
 			return content["actor"];
 		});
 
-		var contentsGroupedCountByDirector = _.pairs(_.countBy(moviesExtendedToDirector, function(content) {
+		var contentsGroupedCountByDirector = _.last(_.sortBy(_.pairs(_.countBy(moviesExtendedToDirector, function(content) {
 			return content["director"];
-		}));
+		})),function(value){
+			return value[1];
+		}),50);
 
 		var contentsGroupedByDirector = _.groupBy(moviesExtendedToDirector, function(content) {
 			return content["director"];
@@ -140,9 +148,9 @@ function statOnImdbAttributes(seenContents, contentType) {
 					} else {
 						usedDatas = contentsGroupedByDirector;
 					}
-					var result = '<span style="color:' + this.series.color + '">' + this.point.name + '</span>: <b>' + this.point.y + '</b> ' + contentType + '<br/> ';
+					var result = '<span style="color:' + this.series.color + '">' + this.point.name + '</span>: <b>' + this.point.y + '</b> ' + contentType + '<br/>';
 					usedDatas[this.point.name].forEach(function(value) {
-						result = result + "<br/> " + value.title;
+						result = result + "<br/>" + value.title;
 					})
 					return result + "<br/>";
 				}
@@ -163,12 +171,12 @@ function statOnImdbAttributes(seenContents, contentType) {
 				type: 'pie',
 				name: 'By Actor',
 				data: contentsGroupedCountByActor,
-				center: ["30%"],
+				center: ["25%"],
 			}, {
 				type: 'pie',
-				name: 'By Genre',
+				name: 'By Director',
 				data: contentsGroupedCountByDirector,
-				center: ["70%"],
+				center: ["75%"],
 			}]
 		});
 	});
@@ -238,12 +246,12 @@ function statOnTraktAttributes(seenContents, contentType) {
 			type: 'pie',
 			name: 'By Year',
 			data: contentsGroupedCountByYear,
-			center: ["30%"],
+			center: ["25%"],
 		}, {
 			type: 'pie',
 			name: 'By Genre',
 			data: contentsGroupedCountByGenres,
-			center: ["70%"],
+			center: ["75%"],
 		}]
 	});
 }
