@@ -15,21 +15,23 @@
         "http://trakt.tv/*"
       ],
       "js": [
-        "jquery-2.0.0.min.js",
-        "handlebars.js",
-        "highcharts.js",
-        "person-trakt-progress.js",
-        "yify-enhancer.js",
-        "underscore-min.js",
-        "trakt-enhancer.js",
-        "charts-enhancer.js"
+        "deps/jquery-2.0.0.min.js",
+        "deps/handlebars.min.js",
+        "deps/highcharts.min.js",
+        "deps/underscore.min.js",
+        "libs/trakt-utils-lib.js",
+        "libs/trakt-lib.js",
+        "libs/imdb-lib.js",
+        "libs/yify-lib.js",
+        "libs/traktweb.js",
+        "traktenhancer-main.js"
       ],
       "css": [
-        "show.20130429.css"
+        "stylesheets/show.20130429.css"
       ]
     }
   ],
   "web_accessible_resources": [
-    "person-trakt-progress.ms.html"
+    "stylesheets/person-trakt-progress.ms.html"
   ]
 }
