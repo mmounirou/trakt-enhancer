@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Trakt Enhancer",
   "description": "This extension add progression in trakt person page and support of torrent yify",
-  "version": "1.5",
+  "version": "2.0",
   "permissions": [
     "http://trakt.tv/",
     "http://api.trakt.tv/",
