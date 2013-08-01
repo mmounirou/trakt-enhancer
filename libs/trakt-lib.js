@@ -2,7 +2,7 @@ window.trakt = (function() {
 	function Trakt() {}
 
 	Trakt.prototype.onMoviePage = function() {
-		return window.location.href.indexOf("http://trakt.tv/movie") == 0;
+		return window.location.href.indexOf("http://trakt.tv/movie/") == 0;
 	};
 
 	Trakt.prototype.onPersonPage = function() {
