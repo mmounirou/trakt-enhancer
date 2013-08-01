@@ -19,6 +19,8 @@
         "deps/handlebars.min.js",
         "deps/highcharts.min.js",
         "deps/underscore.min.js",
+        "deps/timeline-min.js",
+        "deps/storyjs-embed.js",
         "libs/trakt-utils-lib.js",
         "libs/trakt-lib.js",
         "libs/imdb-lib.js",
@@ -27,11 +29,17 @@
         "traktenhancer-main.js"
       ],
       "css": [
-        "stylesheets/show.20130429.css"
+        "stylesheets/show.20130429.css",
+        "stylesheets/timeline.css"
       ]
     }
   ],
   "web_accessible_resources": [
-    "stylesheets/person-trakt-progress.ms.html"
+    "stylesheets/person-trakt-progress.ms.html",
+    "deps/timeline-min.js",
+    "deps/en.js",
+    "stylesheets/timeline.css",
+    "stylesheets/loading.gif",
+    "stylesheets/timeline.png"
   ]
 }

@@ -9,6 +9,10 @@ window.trakt = (function() {
 		return window.location.href.indexOf("http://trakt.tv/person") == 0;
 	};
 
+	Trakt.prototype.onHomePage = function() {
+		return window.location.href == "http://trakt.tv/";
+	};
+
 	Trakt.prototype.onChartPage = function() {
 		return window.location.href.indexOf("charts") >= 0;
 	};
@@ -22,8 +26,9 @@ window.trakt = (function() {
 	};
 
 	Trakt.prototype.getUserName = function() {
-		return $(".name > a").attr("href").replace("/user/", "");
+		return $("div.user a").attr('href').replace("/user/","");
 	};
+
 
 
 	Trakt.prototype.getMonthLabel = function(nmonth) {
@@ -67,6 +72,20 @@ window.traktapi = (function() {
 		var that = this;
 		var request = $.ajax({
 			url: "http://api.trakt.tv/user/library/" + librarytype + "/all.json/" + that.apiKey + "/" + username,
+			type: "GET",
+			dataType: "json",
+			success: callback
+		});
+	};
+
+	TraktApi.prototype.getUserActivity = function(username, librarytype, callback,min) {
+		var that = this;
+		if(min == undefined)
+		{
+			min = 1;
+		}
+		var request = $.ajax({
+			url: "http://api.trakt.tv/activity/user.json/" + that.apiKey + "/" + username + "/"+librarytype+"/watching,scrobble,seen?min="+min,
 			type: "GET",
 			dataType: "json",
 			success: callback

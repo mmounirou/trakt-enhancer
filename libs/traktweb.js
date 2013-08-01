@@ -325,6 +325,88 @@ window.traktweb = (function() {
 		that.addChart("", series, tooltipformatter, statSelectorClass);
 	}
 
+	TraktWeb.prototype.formatDate = function(udate) {
+		var m_names = new Array("January", "February", "March",
+			"April", "May", "June", "July", "August", "September",
+			"October", "November", "December");
+
+		var curr_date = udate.getDate();
+		var curr_month = udate.getMonth();
+		var curr_year = udate.getFullYear();
+		return curr_date + "-" + m_names[curr_month] + "-" + curr_year;
+	};
+
+	TraktWeb.prototype.addTimeLine = function() {
+		var that = this;
+		if (trakt.onHomePage()) {
+			var gettimelinedate = function(activity) {
+				if (activity[activity.type]) {
+
+					if (activity.type == "episode") {
+						return {
+							startDate: new Date(activity.timestamp * 1000),
+							endDate: new Date(activity.timestamp * 1000),
+							date: that.formatDate(new Date(activity.timestamp * 1000)),
+							//headline: activity[activity.type].title,
+							headline: '<a href="' + activity[activity.type].url + '"><b>' + activity.show.title+'</b> : '+ activity[activity.type].title + '</a>',
+							text: activity[activity.type].overview,
+							asset: {
+								media: activity[activity.type].images.screen
+							}
+						}
+					} else if (activity.type == "movie") {
+						return {
+							startDate: new Date(activity.timestamp * 1000),
+							endDate: new Date(activity.timestamp * 1000),
+							date: that.formatDate(new Date(activity.timestamp * 1000)),
+							//headline: activity[activity.type].title,
+							headline: '<a href="' + activity[activity.type].url + '">' + activity[activity.type].title + '</a>',
+							text: activity[activity.type].overview,
+							asset: {
+								media: activity[activity.type].images.fanart
+							}
+						}
+					} else {
+						console.log(activity.type);
+					}
+				}
+
+			}
+
+			var username = trakt.getUserName();
+			var callback = function(activities) {
+				var dates = activities.activity.map(gettimelinedate).filter(function(val) {
+					return !(val == undefined);
+				});
+
+				var timeline = {
+					timeline: {
+						headline: "",
+						type: "default",
+						date: dates
+					}
+				}
+
+				var statSelectorClass = "user-timeline";
+				$("#friends-feed-wrapper").after("<div id='" + statSelectorClass + "'></div>");
+
+				createStoryJS({
+					type: 'timeline',
+					debug: false, //OPTIONAL DEBUG TO CONSOLE
+					width: '100%',
+					height: '500',
+					source: timeline,
+					lang: 'en', //OPTIONAL LANGUAGE
+					start_at_end: true,
+					embed_id: statSelectorClass,
+					css: chrome.extension.getURL("stylesheets/timeline.css"),
+					js: chrome.extension.getURL("deps/timeline-min.js")
+					//locale: chrome.extension.getURL("deps/en.js").replace("en.js","")
+				});
+			}
+			traktapi.getUserActivity(username, "all", callback, 0)
+		}
+	};
 
 	return new TraktWeb();
 }());

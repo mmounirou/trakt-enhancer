@@ -5,4 +5,5 @@ $(document).ready(function() {
 	traktweb.addPeopleProgressionChart();
 	traktweb.addMovieReleaseLocalDate();
 	traktweb.addCharts();
+	traktweb.addTimeLine();
 })
