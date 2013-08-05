@@ -34,10 +34,12 @@ window.traktweb = (function() {
 				var imdbid = $.parseJSON($(data).find(".add-to-list").attr('rel')).imdb_id;
 
 				var callback = function(torrenturl) {
+					if (torrenturl) {
 					$(data).find(".general").append('<span class="download show-tip" title="Download" />');
 					$(data).find(".download").click(function() {
 						location.href = torrenturl;
 					});
+				}
 				}
 				yifyapi.getTorrentUrl(imdbid, quality, callback);
 			});
