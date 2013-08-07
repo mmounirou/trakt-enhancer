@@ -9,31 +9,29 @@
     "http://yify-torrents.com/",
     "http://mymovieapi.com/"
   ],
-  "content_scripts": [
-    {
-      "matches": [
-        "http://trakt.tv/*"
-      ],
-      "js": [
-        "deps/jquery-2.0.0.min.js",
-        "deps/handlebars.min.js",
-        "deps/highcharts.min.js",
-        "deps/underscore.min.js",
-        "deps/timeline-min.js",
-        "deps/storyjs-embed.js",
-        "libs/trakt-utils-lib.js",
-        "libs/trakt-lib.js",
-        "libs/imdb-lib.js",
-        "libs/yify-lib.js",
-        "libs/traktweb.js",
-        "traktenhancer-main.js"
-      ],
-      "css": [
-        "stylesheets/show.20130429.css",
-        "stylesheets/timeline.css"
-      ]
-    }
-  ],
+  "content_scripts": [{
+    "matches": [
+      "http://trakt.tv/*"
+    ],
+    "js": [
+      "deps/jquery-2.0.0.min.js",
+      "deps/handlebars.min.js",
+      "deps/highcharts.min.js",
+      "deps/underscore.min.js",
+      "deps/timeline-min.js",
+      "deps/storyjs-embed.js",
+      "libs/trakt-utils-lib.js",
+      "libs/trakt-lib.js",
+      "libs/imdb-lib.js",
+      "libs/yify-lib.js",
+      "libs/traktweb.js",
+      "traktenhancer-main.js"
+    ],
+    "css": [
+      "stylesheets/show.20130429.css",
+      "stylesheets/timeline.css"
+    ]
+  }],
   "web_accessible_resources": [
     "stylesheets/person-trakt-progress.ms.html",
     "deps/timeline-min.js",
