@@ -85,7 +85,7 @@ window.traktapi = (function() {
 			min = 1;
 		}
 		var request = $.ajax({
-			url: "http://api.trakt.tv/activity/user.json/" + that.apiKey + "/" + username + "/"+librarytype+"/watching,scrobble,seen?min="+min,
+			url: "http://api.trakt.tv/activity/user.json/" + that.apiKey + "/" + username + "/"+librarytype+"/watching,checkin,scrobble,seen?min="+min,
 			type: "GET",
 			dataType: "json",
 			success: callback
