@@ -68,6 +68,14 @@ window.traktapi = (function() {
 		this.apiKey = apiKey;
 	}
 
+	TraktApi.prototype.getMovies = function(imdbIds, callback) {
+
+		var that = this;
+		var queryUrls = imdbIds.map(function(imdbId){return "http://api.trakt.tv/search/movies.json/" + that.apiKey + "?query=" + imdbId;});
+		traktutils.getCachedJSONs(queryUrls,callback);
+
+	};
+
 	TraktApi.prototype.getUserLibrary = function(username, librarytype, callback) {
 		var that = this;
 		var request = $.ajax({

@@ -1,0 +1,18 @@
+<div class="recommendations-bar breakaway-wrapper interactions-wrapper">
+    <div class="inset">
+        <div class="content one-column">
+            <h2 class="section-title">
+                <strong>Movie Sets</strong>
+            </h2>
+            <div class="poster-wrapper no-top">
+            	{{#each collection}}
+	  				<a href="{{this.url}}" class="show-tip" title="{{this.title}}">
+	                    <div class="poster">
+	                        <img alt="{{this.title}}" src="{{this.images.poster}}">
+	                    </div>
+	                </a>
+ 				{{/each}}
+            </div>
+        </div>
+    </div>
+</div>

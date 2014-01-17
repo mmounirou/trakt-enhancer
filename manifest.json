@@ -1,9 +1,10 @@
 {
   "manifest_version": 2,
-  "name": "Trakt Enhancer",
+  "name": "Better Trakt.TV",
   "description": "This extension add progression in trakt person page and support of torrent yify",
   "version": "2.3",
   "permissions": [
+    "storage", 
     "http://trakt.tv/",
     "http://api.trakt.tv/",
     "http://yify-torrents.com/",
@@ -23,6 +24,7 @@
       "libs/trakt-utils-lib.js",
       "libs/trakt-lib.js",
       "libs/imdb-lib.js",
+      "libs/tmdb-lib.js",
       "libs/yify-lib.js",
       "libs/traktweb.js",
       "traktenhancer-main.js"
@@ -34,6 +36,7 @@
   }],
   "web_accessible_resources": [
     "stylesheets/person-trakt-progress.ms.html",
+    "stylesheets/trakt-collection.ms.html",
     "deps/timeline-min.js",
     "deps/en.js",
     "stylesheets/timeline.css",

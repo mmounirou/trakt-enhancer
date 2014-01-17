@@ -9,6 +9,43 @@ window.traktweb = (function() {
 		});
 	}
 
+	TraktWeb.prototype.getMovieCollection = function(tmdbId,callback) {
+		tmdbapi.getMovies([tmdbId],function(movies){
+			if(movies[0].belongs_to_collection == null){
+				callback(null);
+			}else{
+				var collectionId = movies[0].belongs_to_collection.id;
+
+				tmdbapi.getCollections([collectionId],function(collections) {
+					var partsIds = collections[0].parts.map(function(part){return part.id});
+
+					tmdbapi.getMovies(partsIds,function(parts){
+						var imdbIds = parts.map(function(part){return part.imdb_id;}).filter(function(id){return id.length > 0});
+
+						traktapi.getMovies(imdbIds,function(traktMovies) {
+							var orderedCollection = traktMovies.map(function(array){return array[0]}).sort(function(elmt1,elmt2){return elmt1.released > elmt2.released ;});
+							var searchedElement = orderedCollection.filter(function(elmt){ return elmt.tmdb_id == tmdbId})[0];
+							var searchedElementIndex = orderedCollection.indexOf(searchedElement);
+
+							var previousElement = orderedCollection[searchedElementIndex -1];
+							var nextElement = orderedCollection[searchedElementIndex + 1];
+
+
+							callback({
+								queryid:tmdbId,
+								collection:orderedCollection,
+								movie:searchedElement,
+								previous:previousElement,
+								next :nextElement
+							});
+						})
+					});
+				})
+			}
+
+		});
+	};
+
 	TraktWeb.prototype.addYifyDownload = function() {
 		var quality = "720p";
 		if (trakt.onMoviePage()) {
@@ -97,9 +134,23 @@ window.traktweb = (function() {
 		}
 	}
 
+	TraktWeb.prototype.addMovieCollectionBar = function() {
+		var that = this;
+		if (trakt.onMoviePage()){
+			$.get(chrome.extension.getURL("stylesheets/trakt-collection.ms.html"), function(data) {
+				var template = Handlebars.compile(data);
+				var tmdbid = $("#summary-under-wrapper a:contains('TMDb')").attr('href').replace('http://themoviedb.org/movie/','');
+				that.getMovieCollection(tmdbid,function(col){
+					if(col != null && col.collection.length > 0){
+						$("#top-summary").before(template(col));
+					}
+				});
+			});
+		}
+	}
+
 	TraktWeb.prototype.addMovieReleaseLocalDate = function() {
 		if (trakt.onMoviePage() && navigator.geolocation) {
-
 
 			var navigatorcallback = function(position) {
 				var userCountryName = position.countryName;
