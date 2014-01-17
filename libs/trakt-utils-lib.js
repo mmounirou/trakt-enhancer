@@ -16,6 +16,40 @@ window.traktutils = (function() {
 		return result;
 	};
 
+	TraktUtils.prototype.getCachedJSONs = function(urls,callback){
+
+		var notCachedUrls = urls.filter(function(url) {
+			var item = JSON.parse(localStorage.getItem(url));
+			return item === null || new Date(item.expirationDate) < new Date();
+		});
+
+		var requests = [];
+		var datas = [];
+
+		notCachedUrls.forEach(function(usedUrl){
+
+			var callback = function(movie) {
+				movies.push(movie);
+			}
+
+			var request = $.ajax({
+				url: usedUrl,
+				type: "GET",
+				dataType: "json",
+				success: function(data) {
+					datas.push(data);
+				}
+			});
+
+			requests.push(request);
+		});
+
+		$.when.apply(undefined, requests).then(function() {
+			callback(datas);
+		});
+	};
+
 	return new TraktUtils();
 
 }());
+
