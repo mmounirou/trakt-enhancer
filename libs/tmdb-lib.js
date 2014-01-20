@@ -34,5 +34,40 @@ window.tmdbapi = (function() {
 	 	traktutils.getCachedJSONs(tmdbUrls,callback);
 	};
 
+	TmdbApi.prototype.getTmdbActorPicture =function(traktLink,callback) {
+
+		var item = JSON.parse(localStorage.getItem(traktLink));
+		if(item === null || new Date(item.expirationDate) < new Date()){
+			console.log("query server for "+traktLink);
+			$.get( traktLink, function( traktData ) {
+				var link = traktData.substring(traktData.indexOf("http://themoviedb.org/person/"),traktData.indexOf("http://themoviedb.org/person/") + 60);
+				var tmdbId = link.substring(0,link.indexOf('"')).replace("http://themoviedb.org/person/","");
+
+				$.get( "http://www.themoviedb.org/person/" + tmdbId , function(tmdbData) {
+					var tmdbIndex = tmdbData.indexOf("http://image.tmdb.org/t/");
+					var tmdbPersonImage = "";
+					if(tmdbIndex > 0){
+						var tmdbLink = tmdbData.substring(tmdbIndex,tmdbIndex + 100);
+						tmdbPersonImage = tmdbLink.substring(0,tmdbLink.indexOf('"'));
+					}
+
+					var tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
+					localStorage.setItem(traktLink,JSON.stringify({
+						expirationDate : tomorrow,
+						link: tmdbPersonImage
+					})),
+					callback(tmdbPersonImage);
+				});
+
+			});
+		}
+		else{
+			console.log("use cache");
+			callback(item.link);
+		}
+
+
+	};
+
 	return new TmdbApi();
 }());
