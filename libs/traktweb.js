@@ -2,12 +2,27 @@
 window.traktweb = (function() {
 	function TraktWeb() {}
 
+
+	TraktWeb.prototype.fixPeoplePoster = function() {
+		$("div.person[style*='poster-dark']").parent().each(function(i,elmt){
+			var personLink = $(elmt).attr("href");
+			tmdbapi.getTmdbActorPicture(personLink,function(picture) {
+				if(picture.length != 0){
+					$(elmt).find("div").attr("style",'background-image:url('+picture+')');
+				}
+			});
+		});
+	}
+
 	TraktWeb.prototype.fixIssues = function() {
 		//Fix an issue in trakt which allow the user to mark an item as seen or collected indefinitly
 		$(".seen, .collection").click(function() {
 			$(this).remove();
 		});
+
+		this.fixPeoplePoster();
 	}
+
 
 	TraktWeb.prototype.getMovieCollection = function(tmdbId,callback) {
 		tmdbapi.getMovies([tmdbId],function(movies){
