@@ -3,7 +3,24 @@ window.traktweb = (function() {
 	function TraktWeb() {}
 
 
-	TraktWeb.prototype.fixPeoplePoster = function() {
+	TraktWeb.prototype.fixPeoplePosterOnPeoplePage = function() {
+		if(trakt.onPersonPage()){
+			var personImg = $('#person-box img');
+			if(personImg.attr("src").indexOf("avatar") != -1){
+				var traktLink = window.location.href;
+				var personLink = traktLink.substring(traktLink.indexOf('/person'),traktLink.length);
+
+				tmdbapi.getTmdbActorPicture(personLink,function(picture) {
+					if(picture.length != 0){
+						personImg.attr("src",picture);
+					}
+				});
+			
+			}
+		}
+	}
+
+	TraktWeb.prototype.fixPeoplePosterOnMoviePage = function() {
 		$("div.person[style*='poster-dark']").parent().each(function(i,elmt){
 			var personLink = $(elmt).attr("href");
 			tmdbapi.getTmdbActorPicture(personLink,function(picture) {
@@ -20,7 +37,8 @@ window.traktweb = (function() {
 			$(this).remove();
 		});
 
-		this.fixPeoplePoster();
+		this.fixPeoplePosterOnPeoplePage();
+		this.fixPeoplePosterOnMoviePage();
 	}
 
 
