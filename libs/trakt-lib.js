@@ -2,23 +2,23 @@ window.trakt = (function() {
 	function Trakt() {}
 
 	Trakt.prototype.onMoviePage = function() {
-		return window.location.href.indexOf("http://trakt.tv/movie/") == 0;
+		return window.location.href.indexOf("/movie/") > 0;
 	};
 
 	Trakt.prototype.onPersonPage = function() {
-		return window.location.href.indexOf("http://trakt.tv/person") == 0;
+		return window.location.href.indexOf("/person") > 0;
 	};
 
 	Trakt.prototype.onHomePage = function() {
-		return window.location.href == "http://trakt.tv/";
+		return window.location.href.length - (window.location.href.indexOf('trakt.tv') + 'trakt.tv'.length) <= 1;
 	};
 
 	Trakt.prototype.onChartPage = function() {
-		return window.location.href.indexOf("charts") >= 0;
+		return window.location.href.indexOf("/charts") >= 0;
 	};
 
 	Trakt.prototype.onMovieChartPage = function() {
-		return window.location.href.indexOf("charts") >= 0 && window.location.href.indexOf("movies") >= 0;
+		return window.location.href.indexOf("/charts") >= 0 && window.location.href.indexOf("/movies") >= 0;
 	};
 
 	Trakt.prototype.getImdbIdOnMoviePage = function() {
