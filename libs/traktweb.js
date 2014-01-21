@@ -2,12 +2,45 @@
 window.traktweb = (function() {
 	function TraktWeb() {}
 
+
+	TraktWeb.prototype.fixPeoplePosterOnPeoplePage = function() {
+		if(trakt.onPersonPage()){
+			var personImg = $('#person-box img');
+			if(personImg.attr("src").indexOf("avatar") != -1){
+				var traktLink = window.location.href;
+				var personLink = traktLink.substring(traktLink.indexOf('/person'),traktLink.length);
+
+				tmdbapi.getTmdbActorPicture(personLink,function(picture) {
+					if(picture.length != 0){
+						personImg.attr("src",picture);
+					}
+				});
+			
+			}
+		}
+	}
+
+	TraktWeb.prototype.fixPeoplePosterOnMoviePage = function() {
+		$("div.person[style*='poster-dark']").parent().each(function(i,elmt){
+			var personLink = $(elmt).attr("href");
+			tmdbapi.getTmdbActorPicture(personLink,function(picture) {
+				if(picture.length != 0){
+					$(elmt).find("div").attr("style",'background-image:url('+picture+')');
+				}
+			});
+		});
+	}
+
 	TraktWeb.prototype.fixIssues = function() {
 		//Fix an issue in trakt which allow the user to mark an item as seen or collected indefinitly
 		$(".seen, .collection").click(function() {
 			$(this).remove();
 		});
+
+		this.fixPeoplePosterOnPeoplePage();
+		this.fixPeoplePosterOnMoviePage();
 	}
+
 
 	TraktWeb.prototype.getMovieCollection = function(tmdbId,callback) {
 		tmdbapi.getMovies([tmdbId],function(movies){
