@@ -8,6 +8,7 @@
     "http://*.trakt.tv/",
     "https://*.trakt.tv/",
     "http://api.trakt.tv/",
+    "http://ws.geonames.org/",
     "http://yify-torrents.com/",
     "http://mymovieapi.com/"
   ],
