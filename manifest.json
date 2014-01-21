@@ -5,14 +5,17 @@
   "version": "2.4",
   "permissions": [
     "storage", 
-    "http://trakt.tv/",
+    "http://*.trakt.tv/",
+    "https://*.trakt.tv/",
     "http://api.trakt.tv/",
+    "http://ws.geonames.org/",
     "http://yify-torrents.com/",
     "http://mymovieapi.com/"
   ],
   "content_scripts": [{
     "matches": [
-      "http://trakt.tv/*"
+      "http://*.trakt.tv/*",
+      "https://*.trakt.tv/*"
     ],
     "js": [
       "deps/jquery-2.0.0.min.js",
