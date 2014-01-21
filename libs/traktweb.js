@@ -23,7 +23,7 @@ window.traktweb = (function() {
 						var imdbIds = parts.map(function(part){return part.imdb_id;}).filter(function(id){return id.length > 0});
 
 						traktapi.getMovies(imdbIds,function(traktMovies) {
-							var orderedCollection = traktMovies.map(function(array){return array[0]}).sort(function(elmt1,elmt2){return elmt1.released > elmt2.released ;});
+							var orderedCollection = traktMovies.map(function(array){return array[0]}).sort(function(elmt1,elmt2){return elmt1.released - elmt2.released ;});
 							var searchedElement = orderedCollection.filter(function(elmt){ return elmt.tmdb_id == tmdbId})[0];
 							var searchedElementIndex = orderedCollection.indexOf(searchedElement);
 
