@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Better Trakt.TV",
   "description": "This extension add progression in trakt person page and support of torrent yify",
-  "version": "2.4",
+  "version": "2.5",
   "permissions": [
     "storage", 
     "http://*.trakt.tv/",
@@ -10,7 +10,8 @@
     "http://api.trakt.tv/",
     "http://ws.geonames.org/",
     "http://yify-torrents.com/",
-    "http://mymovieapi.com/"
+    "http://mymovieapi.com/",
+    "http://www.themoviedb.org/"
   ],
   "content_scripts": [{
     "matches": [

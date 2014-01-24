@@ -6,10 +6,6 @@ $(document).ready(function() {
 	traktweb.addCharts();
 	traktweb.addTimeLine();
 	traktweb.addMovieCollectionBar();
-
-
-	$("div.person[style*='poster-dark']").parent().forEach(function(elmt){
-		console.log(elmt);
-	});
-
 })
+
+
