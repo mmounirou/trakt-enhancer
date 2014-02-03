@@ -76,6 +76,32 @@ window.traktapi = (function() {
 
 	};
 
+	TraktApi.prototype.getFullUserActivity = function(username,librarytype,actions,callback) {
+		var self = this;
+		var activities = [];
+		var fixedBegin = 0;
+		var rcallback = function(data) {
+			console.log(data);
+			if(data.activity.length == 0){
+				callback(activities);
+			}
+			else{
+				activities = activities.concat(data.activity);
+				var begin = fixedBegin ;
+				var end = data.timestamps.start -1;
+				self.getFullUserActivityNR(username,librarytype,actions,begin,end,rcallback);
+			}
+		}
+
+		var begin = fixedBegin;
+		var end = new Date().getTime();
+		self.getFullUserActivityNR(username,librarytype,actions,begin,end,rcallback);
+	};
+
+	TraktApi.prototype.getFullUserActivityNR = function(username,librarytype,actions,begin,end,callback) {
+		$.getJSON("http://api.trakt.tv/activity/user.json/"+ this.apiKey + "/" + username+"/"+librarytype+"/"+actions+"/"+begin+"/"+end+"?min=1",callback);
+	};
+
 	TraktApi.prototype.getUserLibrary = function(username, librarytype, callback) {
 		var that = this;
 		var request = $.ajax({
