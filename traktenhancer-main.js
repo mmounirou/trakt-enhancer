@@ -6,6 +6,10 @@ $(document).ready(function() {
 	traktweb.addCharts();
 	traktweb.addTimeLine();
 	traktweb.addMovieCollectionBar();
+
+	if(trakt.getUserName() == "mmounirou" || trakt.getUserName() == "madmaxpt"){
+		traktweb.addYifyDownload();
+	}
 })
 
 
